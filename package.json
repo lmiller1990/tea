@@ -1,5 +1,5 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.2",
   "name": "@lmiller1990/t",
   "main": "dist/api.js",
   "devDependencies": {
