@@ -1,6 +1,6 @@
 import { emitter } from "./emitter";
 
-export type TestCase = () => any;
+export type Handler = () => any;
 
 type TestDefinition = (title: string, test: () => any) => any;
 
@@ -24,7 +24,7 @@ export const it: It = function (title, handler) {
 
 it.only = (title: string, test: () => any) => {};
 
-export function describe(title: string, handler: TestCase) {
+export function describe(title: string, handler: Handler) {
   emitter.emit("suite:add", {
     title,
     handler,
