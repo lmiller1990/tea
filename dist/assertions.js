@@ -11,23 +11,8 @@ function toBe(actual) {
         }
         return {
             pass: false,
-            message: `Expected ${expected} to be ${actual}.`,
+            message: `Expected '${expected}' to be '${actual}'.`,
         };
-    };
-}
-function _expect(expected) {
-    return {
-        toBe: (actual) => {
-            if (expected === actual) {
-                return {
-                    pass: true,
-                };
-            }
-            return {
-                pass: false,
-                message: `Expected ${expected} to be ${actual}.`,
-            };
-        },
     };
 }
 function expect(expected) {

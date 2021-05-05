@@ -1,14 +1,18 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.emitter = void 0;
 const events_1 = require("events");
+const chalk_1 = __importDefault(require("chalk"));
+const reporter_1 = require("./reporter");
 function uuidv4() {
     return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
         const r = (Math.random() * 16) | 0, v = c == "x" ? r : (r & 0x3) | 0x8;
         return v.toString(16);
     });
 }
-const suites = new Map();
 class EventEmitter {
     constructor() {
         this.#emitter = new events_1.EventEmitter();
@@ -26,32 +30,57 @@ class EventEmitter {
 }
 const emitter = new EventEmitter();
 exports.emitter = emitter;
+const suites = new Map();
 emitter.on("run", () => {
+    const summary = [];
+    function checkDone(size) {
+        return size === 0;
+    }
+    function summarize(summary) {
+        console.log();
+        for (const sum of summary) {
+            console.log(chalk_1.default.red("FAIL") + `: ${sum.title}`);
+            console.log(`  ${sum.message}`);
+        }
+    }
     async function runSuites(ids) {
         for (const id of ids) {
-            const suite = suites.get(id);
-            if (!suite) {
+            const suiteOrTest = suites.get(id);
+            if (!suiteOrTest) {
                 throw Error(`Suite ${id} not found`);
             }
-            if (suite.type === "suite") {
-                console.log("  ".repeat(suite.depth) + suite.title);
-                runSuites(suite.children);
+            if (suiteOrTest.type === "suite") {
+                reporter_1.reporterDescribe(suiteOrTest);
+                await runSuites(suiteOrTest.children);
+                suites.delete(id);
             }
-            if (suite.type === "test") {
-                emitter.currentTest = suite.id;
-                const parent = suites.get(suite.parent);
+            if (suiteOrTest.type === "test") {
+                emitter.currentTest = suiteOrTest.id;
+                const parent = suites.get(suiteOrTest.parent);
                 if (!parent || parent.type !== "suite") {
                     throw Error(`Suite ${id} not found`);
                 }
-                if (emitter.hasOnly && !suite.only) {
-                    console.log("  ".repeat(parent.depth) + "  " + `○ ${suite.title}`);
+                if (emitter.hasOnly && !suiteOrTest.only) {
+                    reporter_1.reporterItOnly(parent, suiteOrTest);
+                    suites.delete(id);
                 }
                 else {
-                    await suite.handler();
-                    const symbol = suite.result.pass ? "✔" : "✗";
-                    console.log("  ".repeat(parent.depth) + "  " + `${symbol} ${suite.title}`);
+                    await suiteOrTest.handler();
+                    reporter_1.reporterIt(parent, suiteOrTest);
+                    if (!suiteOrTest.result.pass) {
+                        summary.push({
+                            title: suiteOrTest.title,
+                            message: suiteOrTest.result.message,
+                        });
+                    }
+                    suites.delete(id);
                 }
             }
+        }
+        const done = checkDone(suites.size);
+        if (done) {
+            summarize(summary);
+            suites.clear();
         }
     }
     runSuites(emitter.rootSuites);
@@ -85,7 +114,6 @@ emitter.on("test:fail", (result) => {
     test.result = result;
 });
 emitter.on("suite:add", ({ title, handler }) => {
-    console.log('Add suite');
     const id = uuidv4();
     if (emitter.stack.length) {
         const currentSuite = suites.get(emitter.stack[emitter.stack.length - 1]);
