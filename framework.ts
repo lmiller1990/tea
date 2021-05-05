@@ -2,10 +2,10 @@ import { emitter } from "./emitter";
 
 export type TestCase = () => any;
 
-type Test = (title: string, test: () => any) => any;
+type TestDefinition = (title: string, test: () => any) => any;
 
-export interface It extends Test {
-  only: Test;
+export interface It extends TestDefinition {
+  only: TestDefinition;
 }
 
 interface Callable {
@@ -17,9 +17,6 @@ export interface Suite {
   title: string;
   tests: Callable[];
 }
-
-const suites: Suite[] = [];
-let depth = 0;
 
 export const it: It = function (title, handler) {
   emitter.emit("suite:add:test", { title, handler });

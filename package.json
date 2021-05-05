@@ -6,5 +6,8 @@
   },
   "dependencies": {
     "events": "^3.3.0"
+  },
+  "scripts": {
+    "demo": "ts-node index.ts"
   }
 }
