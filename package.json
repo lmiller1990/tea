@@ -10,6 +10,9 @@
     "events": "^3.3.0",
     "minimist": "^1.2.5"
   },
+  "files": [
+    "dist"
+  ],
   "bin": {
     "t": "dist/index.js"
   },
