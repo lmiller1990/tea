@@ -11,7 +11,7 @@ if (!argv._.length) {
   process.exit(1);
 } else {
   const buf = fs.readFileSync(argv._[0], "utf-8");
-  new Function(`return('${buf}')`)();
+  eval(buf);
   run();
 }
 

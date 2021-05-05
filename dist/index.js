@@ -14,7 +14,7 @@ if (!argv._.length) {
 }
 else {
     const buf = fs_1.default.readFileSync(argv._[0], "utf-8");
-    new Function(`return('${buf}')`)();
+    eval(buf);
     api_1.run();
 }
 // describe("Some Function", () => {
