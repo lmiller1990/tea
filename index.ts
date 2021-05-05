@@ -7,14 +7,24 @@ describe("Some Function", () => {
       expect("foo").toBe("foo");
     });
 
-    describe('More Nested', () => {
-      it('third level', () => {
-        expect("ehhhhh").toBe("ahhhh")
-      })
-    })
+    describe("More Nested", () => {
+      it("third level", async () => {
+        return new Promise<void>((res) => {
+          setTimeout(() => {
+            expect("ehhhhh").toBe("ahhhh");
+            res();
+          }, 1000);
+        });
+      });
+    });
 
-    it("foo should be bar", () => {
-      expect("foo").toBe("bar");
+    it("foo should be bar", async () => {
+      return new Promise<void>((res) => {
+        setTimeout(() => {
+          expect("foo").toBe("bar");
+          res();
+        }, 1000);
+      });
     });
   });
 });

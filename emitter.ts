@@ -1,6 +1,6 @@
 import { EventEmitter as EE } from "events";
 import { AssertionFailure, Result } from "./assertions";
-import { TestCase } from "./framework";
+import { Handler } from "./framework";
 
 function uuidv4() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
@@ -32,9 +32,10 @@ interface Test {
   id: string;
   type: "test";
   parent: string;
+  only: boolean;
   title: string;
   result: Result;
-  handler: () => void;
+  handler: () => void | Promise<unknown>;
 }
 
 const suites = new Map<string, Suite | Test>();
@@ -44,6 +45,7 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
   currentTest: string | undefined;
   stack: string[] = [];
   rootSuites: string[] = [];
+  hasOnly: boolean = false;
 
   on<K extends EventKey<T>>(eventName: K, fn: EventReceiver<T[K]>) {
     this.#emitter.on(eventName, fn);
@@ -57,11 +59,15 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
 interface Events {
   "suite:add": {
     title: string;
-    handler: TestCase;
+    handler: Handler;
   };
   "suite:add:test": {
     title: string;
-    handler: TestCase;
+    handler: Handler;
+  };
+  "suite:add:test:only": {
+    title: string;
+    handler: Handler;
   };
   "test:fail": AssertionFailure;
   run: undefined;
@@ -70,7 +76,7 @@ interface Events {
 const emitter = new EventEmitter<Events>();
 
 emitter.on("run", () => {
-  function runSuites(ids: string[]) {
+  async function runSuites(ids: string[]) {
     for (const id of ids) {
       const suite = suites.get(id);
       if (!suite) {
@@ -84,15 +90,20 @@ emitter.on("run", () => {
 
       if (suite.type === "test") {
         emitter.currentTest = suite.id;
-        suite.handler();
         const parent = suites.get(suite.parent);
         if (!parent || parent.type !== "suite") {
           throw Error(`Suite ${id} not found`);
         }
-        const symbol = suite.result.pass ? "✔" : "✗";
-        console.log(
-          "  ".repeat(parent.depth) + "  " + `${symbol} ${suite.title}`
-        );
+
+        if (emitter.hasOnly && !suite.only) {
+          console.log("  ".repeat(parent.depth) + "  " + `○ ${suite.title}`);
+        } else {
+          await suite.handler();
+          const symbol = suite.result.pass ? "✔" : "✗";
+          console.log(
+            "  ".repeat(parent.depth) + "  " + `${symbol} ${suite.title}`
+          );
+        }
       }
     }
   }
@@ -100,7 +111,15 @@ emitter.on("run", () => {
   runSuites(emitter.rootSuites);
 });
 
-emitter.on("suite:add:test", ({ title, handler }) => {
+function addTest({
+  title,
+  handler,
+  only,
+}: {
+  title: string;
+  handler: Handler;
+  only: boolean;
+}) {
   const id = uuidv4();
   const currentSuite = suites.get(
     emitter.stack[emitter.stack.length - 1]
@@ -110,6 +129,7 @@ emitter.on("suite:add:test", ({ title, handler }) => {
   suites.set(id, {
     id,
     type: "test",
+    only,
     parent: emitter.stack[emitter.stack.length - 1],
     title,
     // assume innocent until proven guilty.
@@ -118,6 +138,15 @@ emitter.on("suite:add:test", ({ title, handler }) => {
     },
     handler,
   });
+}
+
+emitter.on("suite:add:test", ({ title, handler }) => {
+  addTest({ title, handler, only: false });
+});
+
+emitter.on("suite:add:test:only", ({ title, handler }) => {
+  addTest({ title, handler, only: true });
+  emitter.hasOnly = true;
 });
 
 emitter.on("test:fail", (result) => {
