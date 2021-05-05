@@ -155,6 +155,7 @@ emitter.on("test:fail", (result) => {
 });
 
 emitter.on("suite:add", ({ title, handler }) => {
+  console.log('Add suite')
   const id = uuidv4();
   if (emitter.stack.length) {
     const currentSuite = suites.get(

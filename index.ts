@@ -1,32 +1,46 @@
-import { it, describe, run } from "./framework";
-import { expect } from "./assertions";
+#!/usr/bin/env node
 
-describe("Some Function", () => {
-  describe("Nested", () => {
-    it("foo should be foo", () => {
-      expect("foo").toBe("foo");
-    });
+import fs from "fs";
+import minimist from "minimist";
+import { run } from "./api";
 
-    describe("More Nested", () => {
-      it("third level", async () => {
-        return new Promise<void>((res) => {
-          setTimeout(() => {
-            expect("ehhhhh").toBe("ahhhh");
-            res();
-          }, 1000);
-        });
-      });
-    });
+const argv = minimist(process.argv.slice(2));
 
-    it("foo should be bar", async () => {
-      return new Promise<void>((res) => {
-        setTimeout(() => {
-          expect("foo").toBe("bar");
-          res();
-        }, 1000);
-      });
-    });
-  });
-});
+if (!argv._.length) {
+  console.error("No test file provided.");
+  process.exit(1);
+} else {
+  const buf = fs.readFileSync(argv._[0], "utf-8");
+  new Function(`return('${buf}')`)();
+  run();
+}
 
-run();
+// describe("Some Function", () => {
+//   describe("Nested", () => {
+//     it("foo should be foo", () => {
+//       expect("foo").toBe("foo");
+//     });
+
+//     describe("More Nested", () => {
+//       it("third level", async () => {
+//         return new Promise<void>((res) => {
+//           setTimeout(() => {
+//             expect("ehhhhh").toBe("ahhhh");
+//             res();
+//           }, 1000);
+//         });
+//       });
+//     });
+
+//     it("foo should be bar", async () => {
+//       return new Promise<void>((res) => {
+//         setTimeout(() => {
+//           expect("foo").toBe("bar");
+//           res();
+//         }, 1000);
+//       });
+//     });
+//   });
+// });
+
+// run();
