@@ -3,6 +3,7 @@
   "name": "@lmiller1990/t",
   "main": "dist/api.js",
   "devDependencies": {
+    "@types/chalk": "^2.2.0",
     "@types/events": "^3.0.0",
     "@types/minimist": "^1.2.1",
     "@types/node": "^15.0.2",
@@ -10,6 +11,7 @@
     "typescript": "^4.2.4"
   },
   "dependencies": {
+    "chalk": "^4.1.1",
     "events": "^3.3.0",
     "minimist": "^1.2.5"
   },
@@ -20,7 +22,7 @@
     "t": "dist/index.js"
   },
   "scripts": {
-    "demo": "ts-node index.ts",
+    "demo": "ts-node demo.ts",
     "build": "tsc"
   }
 }

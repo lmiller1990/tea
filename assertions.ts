@@ -11,6 +11,7 @@ export interface AssertionSuccess {
 
 export type Result = AssertionSuccess | AssertionFailure
 
+
 function toBe<T>(actual: T): (expected: T) => Result {
   return (expected: T) => {
     if (expected === actual) {
@@ -21,25 +22,8 @@ function toBe<T>(actual: T): (expected: T) => Result {
 
     return {
       pass: false,
-      message: `Expected ${expected} to be ${actual}.`,
+      message: `Expected '${expected}' to be '${actual}'.`,
     };
-  };
-}
-
-function _expect<T>(expected: T) {
-  return {
-    toBe: (actual: T): Result => {
-      if (expected === actual) {
-        return {
-          pass: true,
-        };
-      }
-
-      return {
-        pass: false,
-        message: `Expected ${expected} to be ${actual}.`,
-      };
-    },
   };
 }
 
