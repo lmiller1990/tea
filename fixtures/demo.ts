@@ -27,7 +27,7 @@ describe("StringTools", () => {
   });
 
   describe("example failure", () => {
-    it("fails", () => {
+    it("foo.bar is qux", () => {
       demand({ foo: { bar: "qux" } }).to.eql({ foo: { bar: "bar" } });
     });
   });
