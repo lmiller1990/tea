@@ -1,4 +1,4 @@
-import { run, expect, describe, it } from "./api";
+import { expect, describe, it } from "../dist/index.js"
 
 describe("Some Function", () => {
   describe("Nested", () => {
@@ -32,4 +32,3 @@ describe("Some Function", () => {
   });
 });
 
-run();

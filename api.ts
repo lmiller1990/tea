@@ -1,4 +1,3 @@
-import { expect } from "./assertions";
 import { emitter } from "./emitter";
 import { Handler } from "./types";
 
@@ -24,7 +23,7 @@ export function describe(title: string, handler: Handler) {
 }
 
 export function run() {
+  console.log("run");
+  console.log(emitter.rootSuites);
   emitter.emit("run", undefined);
 }
-
-export { expect };

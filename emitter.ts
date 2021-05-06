@@ -4,7 +4,6 @@ import chalk from "chalk";
 import { AssertionFailure } from "./assertions";
 import { Suite, Test, Handler } from "./types";
 import { reporterDescribe, reporterIt, reporterItOnly } from "./reporter";
-import { Hash } from "crypto";
 
 function uuidv4() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
@@ -48,6 +47,7 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
   }
 
   emit<K extends EventKey<T>>(eventName: K, params: T[K]): void {
+    console.log(eventName)
     this.#emitter.emit(eventName, params);
   }
 }

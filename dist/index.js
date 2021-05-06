@@ -1,41 +1,35 @@
-#!/usr/bin/env node
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const minimist_1 = __importDefault(require("minimist"));
-const chokidar_1 = __importDefault(require("chokidar"));
-const api_1 = require("./api");
-const argv = minimist_1.default(process.argv.slice(2));
-if (!argv._.length && !argv.watch) {
-    console.error("No test file provided.");
-    process.exit(1);
-}
-// watch all
-if (!argv._.length && argv.watch) {
-    const loc = process.cwd();
-    console.log(`Watching for changes in ${loc} ...`);
-    const watcher = chokidar_1.default.watch(loc, {
-        ignored: ["node_modules"],
+function flip() {
+    const elm = document.querySelector('#box');
+    // First: get the current bounds
+    const first = elm.getBoundingClientRect();
+    // execute the script that causes layout change
+    elm.classList.toggle('left');
+    elm.classList.toggle('right');
+    // Last: get the final bounds
+    const last = elm.getBoundingClientRect();
+    // Invert: determine the delta between the
+    // first and last bounds to invert the element
+    const deltaX = first.left - last.left;
+    const deltaY = first.top - last.top;
+    const deltaW = first.width / last.width;
+    const deltaH = first.height / last.height;
+    requestAnimationFrame(() => console.log('Calling requestAnimationFrame'));
+    console.log('Animating');
+    // Play: animate the final element from its first bounds
+    // to its last bounds (which is no transform)
+    elm.animate([{
+            transformOrigin: 'top left',
+            transform: `
+    translate(${deltaX}px, ${deltaY}px)
+    scale(${deltaW}, ${deltaH})
+  `
+        }, {
+            transformOrigin: 'top left',
+            transform: 'none'
+        }], {
+        duration: 300,
+        easing: 'ease-in-out',
+        fill: 'both'
     });
-    watcher.on("change", (file) => {
-        console.clear();
-        const buf = fs_1.default.readFileSync(file, "utf-8");
-        eval(buf);
-        api_1.run();
-    });
-}
-// watch specific file(s)
-if (argv._.length && argv.watch) {
-    throw Error('Watching specific files is not supported yet.');
-}
-// run specific file(s)
-if (argv._.length && !argv.watch) {
-    for (const file of argv._) {
-        const buf = fs_1.default.readFileSync(file, "utf-8");
-        eval(buf);
-    }
-    api_1.run();
 }

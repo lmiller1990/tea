@@ -1,7 +1,7 @@
-const { it, describe, expect } = require("./api.js");
+const { it, describe, expect } = require("../");
 
-describe("Suite a", () => {
-  it("a is a", () => {
-    expect("a").toBe("a");
+describe("Suite b", () => {
+  it("b is not a", () => {
+    expect("b").toBe("a");
   });
 });
