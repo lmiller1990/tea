@@ -76,6 +76,7 @@ The code base is as small and simple as possible. It only provides the runner co
 ## API
 
 - `describe`
+- `describe.only`
 - `it`
 - `it.only`
 
