@@ -23,7 +23,8 @@
     "t": "dist/bootstrap.js"
   },
   "scripts": {
-    "demo": "ts-node demo.ts",
+    "demo:ts": "ts-node ./dist/bootstrap.js fixtures/demo.ts",
+    "demo:js": "node ./dist/bootstrap.js fixtures/a.js fixtures/b.js",
     "build": "rimraf dist && tsc -p . --declaration"
   }
 }

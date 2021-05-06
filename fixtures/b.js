@@ -1,11 +1,6 @@
-const { expect, describe, it } = require("../index");
+const { expect, describe, it } = require("../dist");
 
 describe("Some Function", () => {
-  describe("nothing nothing", () => {
-    it("asdf", () => {
-    })
-  })
-
   describe("Nested", () => {
     it("foo should be foo", () => {
       expect("foo").toBe("foo");
