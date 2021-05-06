@@ -5,6 +5,7 @@ export type Handler = () => any;
 export interface Suite {
   id: string;
   type: "suite";
+  only: boolean;
   title: string;
   depth: number;
   children: string[];
@@ -13,8 +14,8 @@ export interface Suite {
 export interface Test {
   id: string;
   type: "test";
-  parent: string;
   only: boolean;
+  parent: string;
   title: string;
   result: Result;
   handler: () => void | Promise<unknown>;

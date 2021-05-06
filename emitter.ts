@@ -33,13 +33,14 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
   currentTest: string | undefined;
   stack: string[] = [];
   rootSuites: string[] = [];
-  hasOnly: boolean = false;
+  hasItOnly: boolean = false;
+  hasDescribeOnly: boolean = false;
 
   clear() {
     this.currentTest = undefined;
     this.stack = [];
     this.rootSuites = [];
-    this.hasOnly = false;
+    this.hasItOnly = false;
   }
 
   on<K extends EventKey<T>>(eventName: K, fn: EventReceiver<T[K]>) {
@@ -53,6 +54,10 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
 
 interface Events {
   "suite:add": {
+    title: string;
+    handler: Handler;
+  };
+  "suite:add:only": {
     title: string;
     handler: Handler;
   };
@@ -107,7 +112,10 @@ emitter.on("run", () => {
           throw Error(`Suite ${id} not found`);
         }
 
-        if (emitter.hasOnly && !suiteOrTest.only) {
+        const isInOnlySuite = emitter.hasDescribeOnly && parent.only;
+        const isOnlyTest = emitter.hasItOnly && !suiteOrTest.only;
+
+        if (isOnlyTest || !isInOnlySuite) {
           reporterItOnly(parent, suiteOrTest);
           suites.delete(id);
         } else {
@@ -184,7 +192,7 @@ emitter.on("suite:add:test", ({ title, handler }) => {
 
 emitter.on("suite:add:test:only", ({ title, handler }) => {
   addTest({ title, handler, only: true });
-  emitter.hasOnly = true;
+  emitter.hasItOnly = true;
 });
 
 emitter.on("test:fail", (result) => {
@@ -192,7 +200,15 @@ emitter.on("test:fail", (result) => {
   test.result = result;
 });
 
-emitter.on("suite:add", ({ title, handler }) => {
+function addSuite({
+  title,
+  handler,
+  only,
+}: {
+  title: string;
+  handler: Handler;
+  only: boolean;
+}) {
   const id = uuidv4();
   if (emitter.stack.length) {
     const currentSuite = suites.get(
@@ -203,17 +219,27 @@ emitter.on("suite:add", ({ title, handler }) => {
     emitter.rootSuites.push(id);
   }
 
-  emitter.stack.push(id);
   const suite: Suite = {
     id,
     type: "suite",
     title,
-    depth: emitter.stack.length - 1,
+    only,
+    depth: emitter.stack.length,
     children: [],
   };
+  emitter.stack.push(id);
   suites.set(id, suite);
   handler();
   emitter.stack.pop();
+}
+
+emitter.on("suite:add:only", ({ title, handler }) => {
+  addSuite({ title, handler, only: true });
+  emitter.hasDescribeOnly = true;
+});
+
+emitter.on("suite:add", ({ title, handler }) => {
+  addSuite({ title, handler, only: false });
 });
 
 export { emitter };
