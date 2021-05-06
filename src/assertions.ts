@@ -1,15 +1,15 @@
 import { emitter } from "./emitter";
 
 export interface AssertionFailure {
-  pass: false
-  message: string
+  pass: false;
+  message: string;
 }
 
 export interface AssertionSuccess {
-  pass: true
+  pass: true;
 }
 
-export type Result = AssertionSuccess | AssertionFailure
+export type Result = AssertionSuccess | AssertionFailure;
 
 function toBe<T>(actual: T): (expected: T) => Result {
   return (expected: T) => {
@@ -29,10 +29,10 @@ function toBe<T>(actual: T): (expected: T) => Result {
 export function expect<T>(expected: T) {
   return {
     toBe: (actual: T) => {
-      const result = toBe(actual)(expected)
+      const result = toBe(actual)(expected);
 
       if (result.pass === false) {
-        emitter.emit("test:fail", result)
+        emitter.emit("test:fail", result);
       }
     },
   };

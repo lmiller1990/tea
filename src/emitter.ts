@@ -115,7 +115,7 @@ emitter.on("run", () => {
         const isInOnlySuite = emitter.hasDescribeOnly && parent.only;
         const isOnlyTest = emitter.hasItOnly && !suiteOrTest.only;
 
-        if (isOnlyTest || !isInOnlySuite) {
+        if (isOnlyTest || (emitter.hasDescribeOnly && !parent.only)) {
           reporterItOnly(parent, suiteOrTest);
           suites.delete(id);
         } else {

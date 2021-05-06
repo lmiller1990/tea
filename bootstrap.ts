@@ -11,7 +11,6 @@ if (!argv._.length) {
   process.exit(1);
 }
 
-
 // run specific file(s)
 for (const file of argv._) {
   require(path.resolve(file));

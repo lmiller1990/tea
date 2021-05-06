@@ -1,4 +1,4 @@
-## Tea 
+## Tea
 
 Tea is a very simple test runner. It's written for an upcoming YouTube and blog post series on how to build a test runner. It works with JavaScript and TypeScript.
 
@@ -6,7 +6,7 @@ Here's a simple snippet, using Tea with [must.js](https://github.com/moll/js-mus
 
 ```ts
 import demand from "must";
-import { describe, it } from "@lmiller1990/tea"
+import { describe, it } from "@lmiller1990/tea";
 
 const StringTools = {
   upcase(str: string) {
@@ -85,4 +85,3 @@ The code base is as small and simple as possible. It only provides the runner co
 If you test is written in JavaScript, just run `yarn tea <test files>`.
 
 If you are using TypeScript, you can run using `ts-node`: `ts-node -T node_modules/.bin/tea demo.ts`. I might implement some kind of register API in the future, eg `yarn tea --register ts-node/register demo.ts`, but it is not implemented right now.
-
