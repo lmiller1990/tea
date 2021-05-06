@@ -11,7 +11,6 @@ export interface AssertionSuccess {
 
 export type Result = AssertionSuccess | AssertionFailure
 
-
 function toBe<T>(actual: T): (expected: T) => Result {
   return (expected: T) => {
     if (expected === actual) {

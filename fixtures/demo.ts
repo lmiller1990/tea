@@ -1,34 +1,29 @@
-import { expect, describe, it } from "../dist/index"
+import { expect, describe, it } from "../dist/index";
 
-describe("Some Function", () => {
-  describe("Nested", () => {
-    it("foo should be foo", () => {
-      expect("foo").toBe("foo");
+const StringTools = {
+  upcase(str: string) {
+    return str.toUpperCase();
+  },
+
+  split(str: string, sep = " ") {
+    return str.split(sep);
+  },
+};
+
+describe("StringTools", () => {
+  describe("upcase", () => {
+    it("upcases the input", () => {
+      const result = StringTools.upcase("message");
+      expect(result).toBe("MESSAGE");
     });
+  });
 
-    describe("More Nested", () => {
-      it("third level", async () => {
-        return new Promise<void>((res) => {
-          setTimeout(() => {
-            expect("ehhhhh").toBe("ahhhh");
-            res();
-          }, 1000);
-        });
-      });
-
-      it("fails", () => {
-        expect('foo').toBe('bar')
-      })
-    });
-
-    it("foo should be bar", async () => {
-      return new Promise<void>((res) => {
-        setTimeout(() => {
-          expect("foo").toBe("bar");
-          res();
-        }, 1000);
-      });
+  describe("split", () => {
+    it("splits the input by white space", () => {
+      const result = StringTools.split("a b c");
+      expect(result[0]).toBe("a")
+      expect(result[1]).toBe("b")
+      expect(result[2]).toBe("c")
     });
   });
 });
-
