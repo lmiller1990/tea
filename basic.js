@@ -1,7 +1,7 @@
-const { it, describe, expect } = require("./dist/api.js");
+const { it, describe, expect } = require("./api.js");
 
 describe("Nested", () => {
   it("foo should be foo", () => {
-    expect("foo").toBe("foo");
+    expect("foooo").toBe("foo");
   });
 });
