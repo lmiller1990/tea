@@ -1,7 +1,7 @@
 {
-  "version": "0.0.8",
+  "version": "0.0.10",
   "name": "@lmiller1990/t",
-  "main": "dist/api.js",
+  "main": "dist/index.js",
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/events": "^3.0.0",
@@ -19,7 +19,7 @@
     "dist"
   ],
   "bin": {
-    "t": "dist/index.js"
+    "t": "dist/bootstrap.js"
   },
   "scripts": {
     "demo": "ts-node demo.ts",
