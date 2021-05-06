@@ -1,12 +1,13 @@
 {
   "version": "0.0.12",
-  "name": "@lmiller1990/t",
+  "name": "@lmiller1990/tea",
   "main": "dist/index.js",
   "devDependencies": {
     "@types/chalk": "^2.2.0",
     "@types/events": "^3.0.0",
     "@types/minimist": "^1.2.1",
     "@types/node": "^15.0.2",
+    "must": "^0.13.4",
     "rimraf": "^3.0.2",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
@@ -20,11 +21,11 @@
     "dist"
   ],
   "bin": {
-    "t": "dist/bootstrap.js"
+    "tea": "dist/bootstrap.js"
   },
   "scripts": {
     "demo:ts": "ts-node ./dist/bootstrap.js fixtures/demo.ts",
-    "demo:js": "node ./dist/bootstrap.js fixtures/a.js fixtures/b.js",
+    "demo:js": "node ./dist/bootstrap.js fixtures/demo.js",
     "build": "rimraf dist && tsc -p . --declaration"
   }
 }

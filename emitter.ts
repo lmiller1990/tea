@@ -36,10 +36,10 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
   hasOnly: boolean = false;
 
   clear() {
-    this.currentTest = undefined
-    this.stack = []
-    this.rootSuites = []
-    this.hasOnly = false
+    this.currentTest = undefined;
+    this.stack = [];
+    this.rootSuites = [];
+    this.hasOnly = false;
   }
 
   on<K extends EventKey<T>>(eventName: K, fn: EventReceiver<T[K]>) {
@@ -111,7 +111,19 @@ emitter.on("run", () => {
           reporterItOnly(parent, suiteOrTest);
           suites.delete(id);
         } else {
-          await suiteOrTest.handler();
+          try {
+            await suiteOrTest.handler();
+          } catch (e) {
+            if (e.name === "AssertionError") {
+              emitter.emit("test:fail", {
+                pass: false,
+                message: `Expected: ${JSON.stringify(
+                  e.expected
+                )}\n  Received: ${JSON.stringify(e.actual)}`,
+              });
+            }
+          }
+
           reporterIt(parent, suiteOrTest);
 
           if (!suiteOrTest.result.pass) {
@@ -129,8 +141,8 @@ emitter.on("run", () => {
     const done = checkDone(suites.size);
     if (done) {
       summarize(summary);
-      suites.clear()
-      emitter.clear()
+      suites.clear();
+      emitter.clear();
     }
   }
 

@@ -1,12 +1,12 @@
-import demand from "must";
-import { describe, it } from "../dist/index";
+const demand = require("must");
+const { describe, it } = require("../dist/index");
 
 const StringTools = {
-  upcase(str: string) {
+  upcase(str) {
     return str.toUpperCase();
   },
 
-  split(str: string, sep = " ") {
+  split(str, sep = " ") {
     return str.split(sep);
   },
 };
