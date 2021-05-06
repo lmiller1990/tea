@@ -1,4 +1,4 @@
-import { expect, describe, it } from "../dist/index.js"
+import { expect, describe, it } from "../dist/index"
 
 describe("Some Function", () => {
   describe("Nested", () => {

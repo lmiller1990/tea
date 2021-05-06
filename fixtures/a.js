@@ -1,4 +1,4 @@
-const { run, expect, describe, it } = require("../index");
+const { expect, describe, it } = require("../dist");
 
 describe("A", () => {
   describe("B", () => {

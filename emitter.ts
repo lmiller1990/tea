@@ -47,7 +47,6 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
   }
 
   emit<K extends EventKey<T>>(eventName: K, params: T[K]): void {
-    console.log(eventName)
     this.#emitter.emit(eventName, params);
   }
 }

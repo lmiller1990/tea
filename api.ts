@@ -23,7 +23,5 @@ export function describe(title: string, handler: Handler) {
 }
 
 export function run() {
-  console.log("run");
-  console.log(emitter.rootSuites);
   emitter.emit("run", undefined);
 }

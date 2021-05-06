@@ -31,7 +31,6 @@ class EventEmitter {
         this.#emitter.on(eventName, fn);
     }
     emit(eventName, params) {
-        console.log(eventName);
         this.#emitter.emit(eventName, params);
     }
 }

@@ -12,7 +12,6 @@ if (!argv._.length) {
     console.error("No test file provided.");
     process.exit(1);
 }
-console.log(argv._);
 // run specific file(s)
 for (const file of argv._) {
     require(path_1.default.resolve(file));

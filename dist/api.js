@@ -17,8 +17,6 @@ function describe(title, handler) {
 }
 exports.describe = describe;
 function run() {
-    console.log("run");
-    console.log(emitter_1.emitter.rootSuites);
     emitter_1.emitter.emit("run", undefined);
 }
 exports.run = run;

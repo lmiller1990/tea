@@ -12,8 +12,6 @@ if (!argv._.length) {
 }
 
 
-console.log(argv._)
-
 // run specific file(s)
 for (const file of argv._) {
   require(path.resolve(file));
