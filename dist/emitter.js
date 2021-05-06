@@ -21,6 +21,12 @@ class EventEmitter {
         this.hasOnly = false;
     }
     #emitter;
+    clear() {
+        this.currentTest = undefined;
+        this.stack = [];
+        this.rootSuites = [];
+        this.hasOnly = false;
+    }
     on(eventName, fn) {
         this.#emitter.on(eventName, fn);
     }
@@ -81,6 +87,7 @@ emitter.on("run", () => {
         if (done) {
             summarize(summary);
             suites.clear();
+            emitter.clear();
         }
     }
     runSuites(emitter.rootSuites);

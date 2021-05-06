@@ -15,20 +15,27 @@ if (!argv._.length && !argv.watch) {
 }
 // watch all
 if (!argv._.length && argv.watch) {
-    console.log(`Watching ${process.cwd()}`);
-    const watcher = chokidar_1.default.watch(process.cwd(), {
+    const loc = process.cwd();
+    console.log(`Watching for changes in ${loc} ...`);
+    const watcher = chokidar_1.default.watch(loc, {
         ignored: ["node_modules"],
     });
     watcher.on("change", (file) => {
-        console.log(`${file} changed`);
+        console.clear();
         const buf = fs_1.default.readFileSync(file, "utf-8");
         eval(buf);
         api_1.run();
     });
 }
-else {
-    console.log('Run one test');
-    const buf = fs_1.default.readFileSync(argv._[0], "utf-8");
-    eval(buf);
+// watch specific file(s)
+if (argv._.length && argv.watch) {
+    throw Error('Watching specific files is not supported yet.');
+}
+// run specific file(s)
+if (argv._.length && !argv.watch) {
+    for (const file of argv._) {
+        const buf = fs_1.default.readFileSync(file, "utf-8");
+        eval(buf);
+    }
     api_1.run();
 }

@@ -2,6 +2,9 @@ import chalk from "chalk";
 import { Suite, Test } from "./types";
 
 export function reporterDescribe(suite: Suite) {
+  if (suite.depth === 0) {
+    console.log()
+  }
   console.log("  ".repeat(suite.depth) + suite.title);
 }
 

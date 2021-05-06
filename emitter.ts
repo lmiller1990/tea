@@ -4,6 +4,7 @@ import chalk from "chalk";
 import { AssertionFailure } from "./assertions";
 import { Suite, Test, Handler } from "./types";
 import { reporterDescribe, reporterIt, reporterItOnly } from "./reporter";
+import { Hash } from "crypto";
 
 function uuidv4() {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
@@ -34,6 +35,13 @@ class EventEmitter<T extends EventMap> implements Emitter<T> {
   stack: string[] = [];
   rootSuites: string[] = [];
   hasOnly: boolean = false;
+
+  clear() {
+    this.currentTest = undefined
+    this.stack = []
+    this.rootSuites = []
+    this.hasOnly = false
+  }
 
   on<K extends EventKey<T>>(eventName: K, fn: EventReceiver<T[K]>) {
     this.#emitter.on(eventName, fn);
@@ -123,6 +131,7 @@ emitter.on("run", () => {
     if (done) {
       summarize(summary);
       suites.clear()
+      emitter.clear()
     }
   }
 

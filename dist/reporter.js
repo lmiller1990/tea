@@ -6,6 +6,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.reporterIt = exports.reporterItOnly = exports.reporterDescribe = void 0;
 const chalk_1 = __importDefault(require("chalk"));
 function reporterDescribe(suite) {
+    if (suite.depth === 0) {
+        console.log();
+    }
     console.log("  ".repeat(suite.depth) + suite.title);
 }
 exports.reporterDescribe = reporterDescribe;
