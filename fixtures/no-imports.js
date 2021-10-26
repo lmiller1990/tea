@@ -2,10 +2,6 @@ const StringTools = {
   upcase(str) {
     return str.toUpperCase()
   },
-
-  split(str, sep = ' ') {
-    return str.split(sep)
-  },
 }
 
 describe('StringTools', () => {
@@ -16,16 +12,9 @@ describe('StringTools', () => {
     })
   })
 
-  describe('split', () => {
-    it('splits the input by white space', () => {
-      const result = StringTools.split('a b c')
-      demand(result).to.eql(['a', 'b', 'c'])
-    })
-  })
-
   describe('example failure', () => {
-    it('foo.bar is qux', () => {
-      demand({ foo: { bar: 'qux' } }).to.eql({ foo: { bar: 'bar' } })
+    it('misunderstood genius', () => {
+      demand(2 + 2).to.eql(22)
     })
   })
 })

@@ -129,6 +129,11 @@ emitter.on("run", () => {
                   e.expected
                 )}\n  Received: ${JSON.stringify(e.actual)}`,
               });
+            } else {
+              emitter.emit("test:fail", {
+                pass: false,
+                message: e
+              })
             }
           }
 

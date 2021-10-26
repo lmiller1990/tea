@@ -13,8 +13,11 @@ if (!files.length) {
   process.exit(1)
 }
 
-
 if (argv.i) {
+  if (files.length > 1) {
+    console.error('Right now this feature works on one file at the time.')
+    process.exit(1)
+  }
   spawnExecCtxs(files)
 } else {
   // run specific file(s)
