@@ -27,6 +27,7 @@
   "scripts": {
     "demo:ts": "ts-node ./dist/bootstrap.js fixtures/demo.ts",
     "demo:js": "node ./dist/bootstrap.js fixtures/demo.js",
+    "demo:inject": "ts-node ./dist/bootstrap.js fixtures/no-imports.js -i",
     "build": "rimraf dist && tsc -p . --declaration",
     "lint": "yarn prettier *.ts src/* --write"
   }
