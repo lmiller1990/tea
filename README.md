@@ -68,6 +68,7 @@ It's available on npm, but unstable and prone to change. This is not intended fo
 - `yarn build` to build (you need do to this when you make any changes to the source)
 - `yarn demo:ts` to run a TypeScript test project
 - `yarn demo:js` to run a JavaScript test project
+- `yarn demo:inject` to run a Javascript test project where `describe`, `it`, `must` do not need to be explicitly imported.
 
 ## Design Goals
 
